@@ -81,9 +81,13 @@ all:
     @$(MAKE) /NOLOGO /$(MAKEFLAGS)
     cd "$(MAKEDIR)\tracelnk"
     @$(MAKE) /NOLOGO /$(MAKEFLAGS)
-!IF "$(DETOURS_TARGET_PROCESSOR)" != "ARM" && "$(DETOURS_TARGET_PROCESSOR)" != "ARM64"
-    cd "$(MAKEDIR)\tryman"
+#   MINE
+    cd "$(MAKEDIR)\tracelnk_MINE"
     @$(MAKE) /NOLOGO /$(MAKEFLAGS)
+!IF "$(DETOURS_TARGET_PROCESSOR)" != "ARM" && "$(DETOURS_TARGET_PROCESSOR)" != "ARM64"
+# This is giving an error (sn not found)
+#    cd "$(MAKEDIR)\tryman"
+#    @$(MAKE) /NOLOGO /$(MAKEFLAGS)
 !ENDIF
     cd "$(MAKEDIR)\impmunge"
     @$(MAKE) /NOLOGO /$(MAKEFLAGS)
