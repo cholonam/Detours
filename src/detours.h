@@ -28,6 +28,15 @@
 #pragma warning(disable:4091) // empty typedef
 #endif
 
+// Suppress declspec(dllimport) for the sake of Detours
+// users that provide kernel32 functionality themselves.
+// This is ok in the mainstream case, it will just cost
+// an extra instruction calling some functions, which
+// LTCG optimizes away.
+//
+#define _KERNEL32_ 1
+#define _USER32_ 1
+
 #include <windows.h>
 #if (_MSC_VER < 1310)
 #else
@@ -38,6 +47,16 @@
 #include <strsafe.h>
 #pragma warning(pop)
 #endif
+
+// From winerror.h, as this error isn't found in some SDKs:
+//
+// MessageId: ERROR_DYNAMIC_CODE_BLOCKED
+//
+// MessageText:
+//
+// The operation was blocked as the process prohibits dynamic code generation.
+//
+#define ERROR_DYNAMIC_CODE_BLOCKED       1655L
 
 #endif // DETOURS_INTERNAL
 
@@ -120,6 +139,7 @@ typedef ULONG ULONG_PTR;
 #undef _In_
 #undef _In_bytecount_
 #undef _In_count_
+#undef __in_ecount
 #undef _In_opt_
 #undef _In_opt_bytecount_
 #undef _In_opt_count_
@@ -174,6 +194,10 @@ typedef ULONG ULONG_PTR;
 
 #ifndef _In_count_
 #define _In_count_(x)
+#endif
+
+#ifndef __in_ecount
+#define __in_ecount(x)
 #endif
 
 #ifndef _In_opt_
